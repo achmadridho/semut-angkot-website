@@ -29,7 +29,7 @@ Route::get('search', 'CMap@search');
 
 Route::group(['prefix' => 'user'],function(){
     Route::post('inserttaxi','CUser@insertUserTaxi');
-    Route::post('edittaxi','CUser@editUserTaxi');
+    Route::post('editdriver','CUser@editUserAngkot');
     Route::post('signin','CUser@loginadmin');
     Route::post('delete','CUser@delete');
     Route::get('logout','CUser@logout');

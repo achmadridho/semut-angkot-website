@@ -4,8 +4,7 @@
     <title> Semut Angkot</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
     <link href="{{url('/')}}/main/resources/assets/semantic/dist/semantic.css" rel="stylesheet" type="text/css">
-    <link href="{{url('/')}}/main/resources/assets/leafletsearch/src/leaflet-search.css" rel="stylesheet" type="text/css">
-    <link rel="shortcut icon" href="{{url('/')}}/main/resources/assets/images/angkot/Artboard%202hdpi.png"/>
+     <link rel="shortcut icon" href="{{url('/')}}/main/resources/assets/images/angkot/Artboard%202hdpi.png"/>
 
     <style>
 
@@ -18,7 +17,6 @@
 <script type="text/javascript" src="{{url('/')}}/main/resources/assets/semantic/dist/jquery.min.js"></script>
 <script type="text/javascript" src="{{url('/')}}/main/resources/assets/semantic/dist/semantic.js"></script>
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-<script type="text/javascript" src="{{url('/')}}/main/resources/assets/leafletsearch/src/leaflet-search.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key=AIzaSyCSGRdkLk-IiiUGIucZP3Vs6FnpCqNJLew"></script>
 
 <link href="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.css" rel="stylesheet" type="text/css" />
@@ -124,21 +122,30 @@
 
                     deleteusertaxi($(this).prop("_id"));
                 });
-
+                editBtn[i]=document.createElement('input');
+                editBtn[i].type="button";
+                editBtn[i].id="editButton"+i;
+                editBtn[i].name="editButton"+i;
+                editBtn[i].className="ui blue button";
+                editBtn[i].value="edit";
+                editBtn[i]._id=data[i]._id;
+                editBtn[i].data=data[i];
+                td.appendChild(editBtn[i]);
+                $("#editButton"+i+"").click(function () {
+                    editFormOpen($(this).prop("data"));
+                });
                 count++;
             };
         }
         function editFormOpen(data) {
             $(".editTataModalBody #_id").val(data._id);
-            $(".editTataModalBody #Name").val(data.Name);
-            $(".editTataModalBody #Username").val(data.username);
-            $(".editTataModalBody #Email").val(data.Email);
-            $(".editTataModalBody #PhoneNumber").val(data.PhoneNumber);
-            $(".editTataModalBody #Plat_motor").val(data.Plat_motor);
+            $(".editTataModalBody #Name1").val(data.Name);
+            $(".editTataModalBody #Email1").val(data.Email);
+            $(".editTataModalBody #PhoneNumber1").val(data.PhoneNumber);
+            $(".editTataModalBody #Plat_motor1").val(data.Angkot.PlatNomor);
             $(".editTataModalBody #fotoProfile").attr('src',data.Path_foto);
             $('.ui.modal')
-                    .modal('show')
-            ;
+                    .modal('show');
         }
         function deleteusertaxi(id) {
             var result = confirm("Anda Yakin Mau Menghapus User?");
@@ -160,6 +167,12 @@
             var namaTrayek=$("#Trayek option:selected").text();
             var idTrayek=document.getElementById("Trayek").value;
             var showerror=document.getElementById('showerror');
+            console.log(nama)
+            console.log(entity)
+            console.log(plat)
+            console.log(password)
+            console.log(namaTrayek)
+            console.log(idTrayek)
             if(nama!=""&&entity!=""&&plat!=""&&password!=""&&namaTrayek!=""&&idTrayek!=""){
                 if (hasWhiteSpace(plat)) {
                     showerror.style.display='block';
@@ -249,12 +262,60 @@
 
 
         });
+
     });
 
 
 </script>
 
+<div class="ui modal small" id="editDataModal" style="width:50% ">
+    <i class="close icon"></i>
+    <div class="header">
+        Edit Data Driver
+    </div>
 
+    {{ Form::open(array('url'=>'user/editdriver','files'=>true,'class'=>'ui form','style'=>'margin-top:1ch ;margin:5ch')) }}
+    <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+
+
+    <div class="editTataModalBody">
+        <input type="hidden" name="_id" id="_id"/>
+        <div class="ui grid">
+            <div class="ui medium image eight wide column">
+                <div class="field">
+                    <label>Edit Image</label>
+                    {{ Form::file('Image','',array('id'=>'Image','name'=>'Image','class'=>'ui input')) }}
+                </div>
+                <img name="fotoProfile" id="fotoProfile">
+            </div>
+
+            <div class="four wide column">
+                <div class="field">
+                    <label>Nama</label>
+                    <input type="Username" name="Name1" id="Name1">
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input type="Username" name="Email1" id="Email1">
+                </div>
+                <div class="field">
+                    <label>Nomor Handphone</label>
+                    <input type="Username" name="PhoneNumber1" id="PhoneNumber1">
+                </div>
+                <div class="field">
+                    <label>Nomor Plat</label>
+                    <input type="Username" name="Plat_motor1" id="Plat_motor1">
+                </div>
+                {{ Form::submit('Submit', ['class' => 'ui button blue']) }}
+            </div>
+        </div>
+
+
+    </div>
+
+    {{ Form::close() }}
+
+</div>
 <div class="pusher" style="padding-left:5%;padding-right: 5%;background: lightblue;height: 100%">
     <div class="ui secondary pointing menu" style="padding: 5px;border-color: yellow;">
             <img class="ui image" src="{{url('/')}}/main/resources/assets/images/angkot/Artboard%202hdpi.png" style="height: 50px">
@@ -289,6 +350,7 @@
                         <option value="">Trayek</option>
                         <option value="1">Cimindi pasar sederhana 24</option>
                         <option value="2">St hall gunung batu 14</option>
+                        <option value="3">Stasiun Hall - Sarijadi</option>
 
                     </select>
                 </div>

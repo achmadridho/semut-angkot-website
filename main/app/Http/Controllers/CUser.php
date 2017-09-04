@@ -16,6 +16,74 @@ use Illuminate\Support\Facades\Input;
 
 class CUser extends Controller
 {
+    public function editUserAngkot(Request $r)
+    {
+
+        if($r->hasFile('Image'))
+        {
+            if ($r->file('Image')->isValid()) {
+                $image = Input::file('Image');
+                $filename  = time() . '.' . $image->getClientOriginalExtension();
+                $allowedMimeTypes = ['image/jpeg','image/gif','image/png','image/bmp','image/svg+xml'];
+                $contentType = mime_content_type($image->getRealPath());
+
+                if(! in_array($contentType, $allowedMimeTypes) ){
+                    Session::flash('error', 'Silahkan Upload Foto Lain');
+                }else{
+
+                    $ftp_server = "ftp.pptik.id";
+                    $ftp_user_name = "ftp.pptik.id|ftppptik";
+                    $ftp_user_pass = "XxYyZz123!";
+                    $destination_file = "/SEMUTANGKOTFILE/".$filename;
+                    $source_file = $image->getRealPath();
+                    $conn_id = ftp_connect($ftp_server);
+                    ftp_pasv($conn_id, true);
+                    $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
+                    if ((!$conn_id) || (!$login_result)) {
+                        Session::flash('message', "FTP connection has failed!");
+                    } else {
+                        $upload = ftp_put($conn_id, $destination_file, $source_file, FTP_BINARY);
+                        if (!$upload) {
+                            Session::flash('message', 'Gagal Update Data');
+                        } else {
+                            $fileHostingname="http://filehosting.pptik.id";
+                            $result= DB::table('tb_user')
+                                ->where('_id', $r['_id'])
+                                ->update(
+                                    ['Name' => $r['Name1'],
+                                        'Email'=> $r['Email1'],
+                                        'PhoneNumber'=> $r['PhoneNumber1'],
+                                        'Plat_motor'=> $r['Plat_motor1'],
+                                        'Path_foto'=>$fileHostingname.$destination_file]);
+                            if ($result){
+                                Session::flash('success', 'Berhasil Edit Data');
+                            }else{
+                                Session::flash('message', 'Gagal Edit Data');
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }else{
+            $result= DB::table('tb_user')
+                ->where('_id', $r['_id'])
+                ->update(
+                    ['Name' => $r['Name1'],
+                        'Email'=> $r['Email1'],
+                        'username'=> $r['Username1'],
+                        'PhoneNumber'=> $r['PhoneNumber1'],
+                        'Plat_motor'=> $r['Plat_motor1']
+                    ]);
+            if ($result){
+                Session::flash('success', 'Berhasil Edit Data');
+            }else{
+                Session::flash('message', 'Gagal Edit Data');
+            }
+        }
+        return Redirect::to('/admin/dashboard');
+    }
     public function loginadmin(Request $request)
     {
         $this->validate($request, [
