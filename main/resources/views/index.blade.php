@@ -125,7 +125,7 @@
         }
         function initTracker() {
 
-            $.get('<?=url('user/listangkot')?>', function(gpstr) {
+            $.get('<?=url('user/listangkottoday')?>', function(gpstr) {
                 console.log(gpstr)
                 if($('#tracer').is(":checked")){
                     for(var i=0;i<gpstr.length;i++){
@@ -187,7 +187,7 @@
         function updateTracker() {
             setInterval(function(){
                 if (init>0){
-                    $.get('<?=url('user/listangkot')?>', function(gpstr) {
+                    $.get('<?=url('user/listangkottoday')?>', function(gpstr) {
                         if($('#tracer').is(":checked")){
                             for(var i=0;i<gpstr.length;i++){
                                 gpstracersMoveMarker[i].moveTo([gpstr[i].Latitude, gpstr[i].Longitude],2000);

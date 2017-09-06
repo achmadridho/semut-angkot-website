@@ -250,13 +250,13 @@
 
             var ByEntitiyButton=document.getElementById("ByEntitiyButton");
             var byentitylabel=document.getElementById("byentitylabel");
-            if(byentitylabel.textContent=="Handphone"){
-                ByEntitiyButton.textContent="Dengan Handphone";
-                byentitylabel.textContent="Email";
-                daftayBy=0;
-            }else {
+            if(byentitylabel.textContent=="Email"){
                 ByEntitiyButton.textContent="Dengan Email";
                 byentitylabel.textContent="Handphone";
+                daftayBy=0;
+            }else {
+                ByEntitiyButton.textContent="Dengan Handphone";
+                byentitylabel.textContent="Email";
                 daftayBy=1;
             }
 
@@ -329,7 +329,7 @@
     <div  class="ui grid" >
         <div id="formtambahusertaxi" class="three wide column ui form" >
             <h3>Tambah Angkot</h3>
-            <button class="ui primary basic button"  id="ByEntitiyButton" style="width: 100%">Dengan Handphone</button>
+            <button class="ui primary basic button"  id="ByEntitiyButton" style="width: 100%">Dengan Email</button>
             <div class="ui segment fifteen wide column" style="border: double;border-color: yellow" >
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
                 <div class="field">
@@ -337,7 +337,7 @@
                     <input type="Username" name="Name" id="Name">
                 </div>
                 <div class="field">
-                    <label id="byentitylabel">Email</label>
+                    <label id="byentitylabel">Handphone</label>
                     <input type="Username" id="Entity">
                 </div>
                 <div class="field">

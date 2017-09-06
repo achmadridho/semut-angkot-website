@@ -34,6 +34,7 @@ Route::group(['prefix' => 'user'],function(){
     Route::post('delete','CUser@delete');
     Route::get('logout','CUser@logout');
     Route::get('listangkot','CUser@getlistuserangkot');
+    Route::get('listangkottoday','CUser@getListUserAngkotToday');
     Route::get('reportlist','CUser@reportlist');
-    Route::get('test','CUser@reportlist');
+    Route::get('test','CUser@getListUserAngkotToday');
 });

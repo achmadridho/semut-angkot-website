@@ -134,6 +134,28 @@ class CUser extends Controller
         }
         return $dataset;
     }
+    public function getListUserAngkotToday()
+    {
+        $dt = Carbon::now()->subDay();
+        $documents = DB::collection('tb_user')
+            ->where('ID_role', '=', 20)
+            ->where("Angkot.LastUpdate",">",$dt)
+            ->select('Name', 'Angkot','Email','PhoneNumber')
+            ->get();
+        $dataset = array();
+        foreach ($documents as $value) {
+            $value['_id'] = (string)$value['_id'];
+            $value['Coordinates']=$value['Angkot']['location']['coordinates'];
+            $value['Longitude']=$value['Coordinates'][0];
+            $value['Latitude']=$value['Coordinates'][1];
+            foreach ($value['Angkot']['LastUpdate'] as $dates){
+                $value['date']=date("D, d-m-Y", $dates/1000);
+                $value['time']=date("H:i:s", $dates/1000);
+            }
+            array_push($dataset, $value);
+        }
+        return $dataset;
+    }
     public function reportlist()
     {
         $documents = DB::collection('tb_post_angkot')
