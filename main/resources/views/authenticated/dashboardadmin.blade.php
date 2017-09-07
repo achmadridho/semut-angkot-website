@@ -143,6 +143,7 @@
             $(".editTataModalBody #Email1").val(data.Email);
             $(".editTataModalBody #PhoneNumber1").val(data.PhoneNumber);
             $(".editTataModalBody #Plat_motor1").val(data.Angkot.PlatNomor);
+            $("#Trayek1").val(data.Angkot.Trayek.TrayekID).change();
             $(".editTataModalBody #fotoProfile").attr('src',data.Path_foto);
             $('.ui.modal')
                     .modal('show');
@@ -178,7 +179,7 @@
                     showerror.style.display='block';
                     showerror.innerHTML="Plat Motor Tidak Boleh Memakai Spasi"
                 }else {
-                    if(daftayBy==0){
+                    if(daftayBy==1){
                         if(validateEmail(entity)){
                             $.ajax({
                                 url: 'http://167.205.7.226:3049/users/register-angkot',
@@ -305,6 +306,16 @@
                 <div class="field">
                     <label>Nomor Plat</label>
                     <input type="Username" name="Plat_motor1" id="Plat_motor1">
+                </div>
+                <div class="field">
+                    <label>Trayek</label>
+                    <select id="Trayek1" name="Trayek1" class="ui fluid selection dropdown">
+                        <option value="">Trayek</option>
+                        <option value="1">Cimindi pasar sederhana 24</option>
+                        <option value="2">St hall gunung batu 14</option>
+                        <option value="3">Stasiun Hall - Sarijadi</option>
+
+                    </select>
                 </div>
                 {{ Form::submit('Submit', ['class' => 'ui button blue']) }}
             </div>

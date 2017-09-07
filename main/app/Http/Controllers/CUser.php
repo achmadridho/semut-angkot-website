@@ -18,7 +18,9 @@ class CUser extends Controller
 {
     public function editUserAngkot(Request $r)
     {
-
+        $selectionOptions = [1 => 'Cimindi pasar sederhana 24', 2 => 'St hall gunung batu 14', 3 => 'Stasiun Hall - Sarijadi'];
+        $selectedTrayek=(int)$r['Trayek1'];
+        $selected = $selectionOptions[$selectedTrayek];
         if($r->hasFile('Image'))
         {
             if ($r->file('Image')->isValid()) {
@@ -53,7 +55,9 @@ class CUser extends Controller
                                     ['Name' => $r['Name1'],
                                         'Email'=> $r['Email1'],
                                         'PhoneNumber'=> $r['PhoneNumber1'],
-                                        'Plat_motor'=> $r['Plat_motor1'],
+                                        'Angkot.PlatNomor'=> $r['Plat_motor1'],
+                                        'Angkot.Trayek.Nama'=> $selected,
+                                        'Angkot.Trayek.TrayekID'=> $selectedTrayek,
                                         'Path_foto'=>$fileHostingname.$destination_file]);
                             if ($result){
                                 Session::flash('success', 'Berhasil Edit Data');
@@ -74,7 +78,9 @@ class CUser extends Controller
                         'Email'=> $r['Email1'],
                         'username'=> $r['Username1'],
                         'PhoneNumber'=> $r['PhoneNumber1'],
-                        'Plat_motor'=> $r['Plat_motor1']
+                        'Angkot.Trayek.Nama'=> $selected,
+                        'Angkot.Trayek.TrayekID'=> $selectedTrayek,
+                        'Angkot.PlatNomor'=> $r['Plat_motor1']
                     ]);
             if ($result){
                 Session::flash('success', 'Berhasil Edit Data');
@@ -136,7 +142,8 @@ class CUser extends Controller
     }
     public function getListUserAngkotToday()
     {
-        $dt = Carbon::now()->subDay();
+        //$dt = Carbon::now()->subDay();
+		$dt = Carbon::today();
         $documents = DB::collection('tb_user')
             ->where('ID_role', '=', 20)
             ->where("Angkot.LastUpdate",">",$dt)
